@@ -561,7 +561,7 @@ def change():
                                totalreg=totalreg(),
                                datetoday2=datetoday2, subjects=subjects, attendance_data=attendance_data)
     return render_template('attendance.html', ID=ID, DateTime=DateTime, MaMH=MaMH, MaPH=MaPH, l=l, totalreg=totalreg(),
-                           datetoday2=datetoday2, subjects=subjects, attendance_data=attendance_data)
+                           datetoday2=datetoday2, subjects=subjects)
 
 
 @app.route('/modify/remove', methods=['GET', 'POST'])
