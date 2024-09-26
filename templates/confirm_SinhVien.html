@@ -70,49 +70,33 @@
         <h2 style="border-radius: 20px 20px 0px 0px;background-color: rgb(85, 93, 159) ;color: white;padding: 10px;">Find Subject <span class="material-symbols-outlined">
             search
             </span></h2>
-        
-
-            <table style="background-color: white;">
-                <thead>
-                    <tr>
-                        {% if student %}
+            <form method="post">
+                <!-- Chỉnh sửa vị trí bảng -->
+                <table style="background-color: white;">
+                    <thead>
+                        <tr>
                             <th>Mã Sinh Viên</th>
                             <th>Tên Sinh Viên</th>
                             <th>Năm Sinh</th>
                             <th>Quê Quán</th>
-                            <th>Lớp</th>
-                        {% elif teacher %}
-                            <th>Mã Giáo Viên</th>
-                            <th>Tên Giáo Viên</th>
-                            <th>Khoa</th>
-                        {% endif %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if student %}
+                            <th>Mã Lớp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {% for st in student %}
                         <tr>
                             <td>{{ st.MaSinhVien }}</td>
                             <td>{{ st.TenSinhVien }}</td>
                             <td>{{ st.NamSinh }}</td>
                             <td>{{ st.QueQuan }}</td>
-                            <td>{{ st.Lop }}</td>
+                            <td>{{ st.MaLop }}</td>
                         </tr>
                         {% endfor %}
-                    {% elif teacher %}
-                        {% for t in teacher %}
-                        <tr>
-                            <td>{{ t.MaGiaoVien }}</td>
-                            <td>{{ t.TenGiaoVien }}</td>
-                            <td>{{ t.Khoa }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% endif %}
-                </tbody>
-            </table>
-            <form method="post">
-                <button style="width: 232px;margin-top: 20px;font-size: 20px; border-radius: 10px; width: 300px; height: 50px;" type='submit' class='btn btn-dark'>Delete
-                </button>
+                    </tbody>
+                </table>
+    
+                <button style="width: 232px;margin-top: 20px;font-size: 20px; border-radius: 10px; width: 300px; height: 50px;"
+                        type='submit' name="confirm" value="Yes" class='btn btn-dark'>Delete</button>
             </form>
     
 

@@ -75,14 +75,26 @@ def train_model():
     userlist = os.listdir('static/faces')
     for user in userlist:
         for imgname in os.listdir(f'static/faces/{user}'):
-            img = cv2.imread(f'static/faces/{user}/{imgname}')
+            img_path = f'static/faces/{user}/{imgname}'
+            img = cv2.imread(img_path)
+
+            # Kiểm tra nếu ảnh được đọc thành công
+            if img is None:
+                print(f"Lỗi: Không thể đọc ảnh {img_path}")
+                continue
+
             resized_face = cv2.resize(img, (50, 50))
             faces.append(resized_face.ravel())
             labels.append(user)
-    faces = np.array(faces)
-    knn = KNeighborsClassifier(n_neighbors=5)
-    knn.fit(faces, labels)
-    joblib.dump(knn, 'static/face_recognition_model.pkl')
+
+    if len(faces) > 0:  # Kiểm tra nếu có dữ liệu để train
+        faces = np.array(faces)
+        knn = KNeighborsClassifier(n_neighbors=5)
+        knn.fit(faces, labels)
+        joblib.dump(knn, 'static/face_recognition_model.pkl')
+        print("Model đã được huấn luyện thành công và lưu.")
+    else:
+        print("Không có dữ liệu để train model.")
 
 
 def extract_attendance():
@@ -291,13 +303,16 @@ def delete_user(userid, role):
         if role == 'student':
             cursor.execute('SELECT TenSinhVien FROM SinhVien WHERE MaSinhVien = ?', (userid,))
             username = cursor.fetchone()
+            cursor.execute("DELETE from DiemDanh where MaSinhVien = ?", (userid,))
             cursor.execute("DELETE FROM SinhVien WHERE MaSinhVien = ?", (userid,))
+
         elif role == 'teacher':
             cursor.execute('SELECT TenGiaoVien FROM GiaoVien WHERE MaGiaoVien = ?', (userid,))
             username = cursor.fetchone()
+            cursor.execute("DELETE from DiemDanh where MaGiaoVien = ?", (userid,))
             cursor.execute("DELETE FROM GiaoVien WHERE MaGiaoVien = ?", (userid,))
 
-        connection.commit()
+            connection.commit()
     return username[0] if username else None
 
 
@@ -572,26 +587,34 @@ def remove():
 
 @app.route('/modify/confirm', methods=['GET', 'POST'])
 def confirm():
+    role = session['role']
+    userid = session['userid']
 
-
-    if request.method == 'POST':
-        role = session['role']
-        userid = session['userid']
-        username = delete_user(userid, role)
-
+    if role == 'student':
+        student = get_user_info(userid)
         if request.form.get('confirm') == 'Yes':
+            username = delete_user(userid, role)
             remove_user_image_folder(username, userid)
-
             # Clean up session
             session.pop('userid', None)
             session.pop('role', None)
             train_model()
-            return "User deleted successfully."
-
-        return redirect(url_for('modify_user'))
-    userid = session['userid']
-    student, teacher = get_user_info(userid)
-    return render_template('confirm.html', teacher=teacher, student=student)
+            flash('Đã xóa sinh viên thành công!', 'success')
+            return redirect(url_for('admin'))
+        return render_template('confirm_SinhVien.html', student=student)
+    elif role == 'teacher':
+        teacher = get_user_info()
+        if request.form.get('confirm') == 'Yes':
+            username = delete_user(userid, role)
+            remove_user_image_folder(username, userid)
+            # Clean up session
+            session.pop('userid', None)
+            session.pop('role', None)
+            train_model()
+            flash('Đã xóa Giáo viên thành công!', 'success')  # Thêm thông báo thành công
+            return redirect(url_for('admin'))
+        return render_template('confirm_GiaoVien.html', teacher=teacher)
+    return redirect(url_for('remove'))
 
 
 @app.route('/modify/changing', methods=['GET', 'POST'])
