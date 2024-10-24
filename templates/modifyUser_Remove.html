@@ -67,7 +67,7 @@
     <div class="col"
             style="border-radius: 20px;padding: 0px;background-color:rgba(202, 219, 231, 0.8);margin:0px 10px 10px 10px;height: 250px;">
             
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" action="/modify/remove" enctype="multipart/form-data">
                 <h2 style="border-radius: 20px 20px 0px 0px;background-color: rgb(85, 93, 159) ;color: white;padding: 10px;">Remove User <i class="material-icons">delete</i></h2>
                 <label style="font-size: 20px;color: white"><b>Enter User Id*</b></label>
                 <br>
@@ -79,7 +79,9 @@
                 </button>
                 <br>
             </form>
-            
+            {% if er%}
+            <p class="text-center" style="color: red;font-size: 20px;">{{ er }}</p>
+            {% endif %}
         </div>
     
 </div>

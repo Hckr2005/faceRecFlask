@@ -67,7 +67,7 @@
 <div class="row text-center" style="padding: 20px;margin: 20px;">
     <div class="col"
          style="border-radius: 20px;padding: 0px;background-color:rgba(202, 219, 231, 0.8);margin:0px 10px 10px 10px;min-height: 470px;">
-        <h2 style="border-radius: 20px 20px 0px 0px;background-color: rgb(85, 93, 159) ;color: white;padding: 10px;">Find Subject <span class="material-symbols-outlined">
+        <h2 style="border-radius: 20px 20px 0px 0px;background-color: rgb(85, 93, 159) ;color: white;padding: 10px;">Confirm <span class="material-symbols-outlined">
             search
             </span></h2>
             <form method="post">
@@ -83,22 +83,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for st in student %}
                         <tr>
-                            <td>{{ st.MaSinhVien }}</td>
-                            <td>{{ st.TenSinhVien }}</td>
-                            <td>{{ st.NamSinh }}</td>
-                            <td>{{ st.QueQuan }}</td>
-                            <td>{{ st.MaLop }}</td>
+                            <td>{{ MaSinhVien }}</td>
+                            <td>{{ TenSinhVien }}</td>
+                            <td>{{ NamSinh }}</td>
+                            <td>{{ QueQuan }}</td>
+                            <td>{{ MaLop }}</td>
                         </tr>
-                        {% endfor %}
                     </tbody>
                 </table>
     
                 <button style="width: 232px;margin-top: 20px;font-size: 20px; border-radius: 10px; width: 300px; height: 50px;"
-                        type='submit' name="confirm" value="Yes" class='btn btn-dark'>Delete</button>
+                        type='submit' name="confirm" value="Yes" class='btn btn-dark'>Confirm</button>
+                
             </form>
-    
+            
 
     </div>
 
